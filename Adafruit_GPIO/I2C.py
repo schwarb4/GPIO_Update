@@ -102,6 +102,7 @@ class Device(object):
             self._bus = i2c_interface(busnum)
         self._logger = logging.getLogger('Adafruit_I2C.Device.Bus.{0}.Address.{1:#0X}' \
                                 .format(busnum, address))
+        self.regvals = [None] * 256
 
     def writeRaw8(self, value):
         """Write an 8-bit value on the bus (without register)."""
@@ -110,12 +111,17 @@ class Device(object):
         self._logger.debug("Wrote 0x%02X",
                      value)
 
-    def write8(self, register, value):
+    def write8(self, reg, value):
         """Write an 8-bit value to the specified register."""
         value = value & 0xFF
-        self._bus.write_byte_data(self._address, register, value)
-        self._logger.debug("Wrote 0x%02X to register 0x%02X",
-                     value, register)
+        if self.regvals[reg] is None or self.regvals[reg] != value:
+            try:    
+            self._bus.write_byte_data(self._address, reg, value)
+            self.revals[reg] = value
+            if self.debug:
+                self._logger.debug("Wrote 0x%02X to register 0x%02X",value, reg)
+            except: IOError as err:
+                    return self.errMsg()
 
     def write16(self, register, value):
         """Write a 16-bit value to the specified register."""
