@@ -116,10 +116,10 @@ class Device(object):
         value = value & 0xFF
         if self.regvals[reg] is None or self.regvals[reg] != value:
             try:    
-            self._bus.write_byte_data(self._address, reg, value)
-            self.revals[reg] = value
-            if self.debug:
-                self._logger.debug("Wrote 0x%02X to register 0x%02X",value, reg)
+                self._bus.write_byte_data(self._address, reg, value)
+                self.revals[reg] = value
+                if self.debug:
+                    self._logger.debug("Wrote 0x%02X to register 0x%02X",value, reg)
             except: IOError as err:
                     return self.errMsg()
 
