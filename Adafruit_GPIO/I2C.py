@@ -120,8 +120,8 @@ class Device(object):
                 self.revals[reg] = value
                 if self.debug:
                     self._logger.debug("Wrote 0x%02X to register 0x%02X",value, reg)
-            except: IOError as err:
-                    return self.errMsg()
+            except:
+                continue
 
     def write16(self, register, value):
         """Write a 16-bit value to the specified register."""
